@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Tmdb</string>
+    <string name="hello_world">Hello world2</string>
+    <string name="title_home_screen">Home</string>
+    <string name="title_favorite_screen">Favorites</string>
+    <string name="search">Search</string>
+    <string name="search_box_desc">Search box</string>
 </resources>
