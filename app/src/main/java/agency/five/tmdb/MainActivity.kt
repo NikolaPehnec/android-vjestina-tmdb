@@ -32,8 +32,9 @@ class MainActivity : ComponentActivity() {
                     val scaffoldState: ScaffoldState = rememberScaffoldState();
 
                     val (canPop, setCanPop) = remember { mutableStateOf(false) }
-                    navController.addOnDestinationChangedListener { controller, _, _ ->
-                        setCanPop(controller.previousBackStackEntry != null)
+                    navController.addOnDestinationChangedListener { controller, navDestination, _ ->
+                        //If the destination isn't home, show back button
+                        setCanPop(!navDestination.route.equals("home"))
                     }
 
                     Scaffold(

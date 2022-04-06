@@ -1,8 +1,12 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.data.CastModel
+import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.Writer
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.time.LocalDate
+import java.util.*
 
 class PreviewData {
 
@@ -63,7 +67,8 @@ class PreviewData {
                         )
                     ),
                     75f,
-                    LocalDate.of(2008, 2, 5),
+                    Date(2008, 2, 5),
+                    // LocalDate.of(2008, 2, 5),
                     listOf("Action", "Science Fiction", "Adventure"),
                     "2h 6m",
                     "After being held captive in an Afghan cave, billionare engineer Tony Stark creates" +
@@ -102,7 +107,7 @@ class PreviewData {
                         )
                     ),
                     78f,
-                    LocalDate.of(1997, 10, 24),
+                    Date(1997, 10, 24),
                     listOf("Science Fiction", "Romance"),
                     "1h 46m",
                     "A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.",
@@ -140,7 +145,7 @@ class PreviewData {
                         )
                     ),
                     85f,
-                    LocalDate.of(1994, 6, 24),
+                    Date(1994, 6, 24),
                     listOf("Musical", "Family"),
                     "1h 29m",
                     "As a cub, Simba is forced to leave the Pride Lands after his father Mufasa is murdered by his wicked uncle, Scar. ",
@@ -178,7 +183,7 @@ class PreviewData {
                         )
                     ),
                     55f,
-                    LocalDate.of(2020, 6, 15),
+                    Date(2020, 6, 15),
                     listOf("Adventure", "Family"),
                     "1h 24m",
                     "One morning, the animals of the jungle wake up to discover that they can speak. They're even more amazed when they learn the reason why: There's an alien in the jungle.",
@@ -216,7 +221,7 @@ class PreviewData {
                         )
                     ),
                     56f,
-                    LocalDate.of(2013, 9, 21),
+                    Date(2013, 9, 21),
                     listOf("Romance", "Drama"),
                     "1h 25m",
                     "A lonely teen's (Solène Rigot) friendship with a free-spirited British neighbor (Audrey Bastien) pushes her to break free of the bonds of childhood.",
@@ -254,7 +259,7 @@ class PreviewData {
                         )
                     ),
                     78f,
-                    LocalDate.of(2016, 5, 5),
+                    Date(2016, 5, 5),
                     listOf("Action", "Adventure"),
                     "2h 28m",
                     "Friction arises between the Avengers when one group supports the government's decision to implement a law to control their powers while the other opposes it.",
@@ -292,7 +297,7 @@ class PreviewData {
                         )
                     ),
                     88f,
-                    LocalDate.of(2010, 4, 29),
+                    Date(2010, 4, 29),
                     listOf("Action", "Adventure"),
                     "2h 28m",
                     "Tony Stark is under pressure from various sources, including the government, to share his technology with the world. He must find a way to fight them while also tackling his other enemies.",
@@ -330,7 +335,7 @@ class PreviewData {
                         )
                     ),
                     63f,
-                    LocalDate.of(2004, 11, 29),
+                    Date(2004, 11, 29),
                     listOf("Science Fiction", "Action"),
                     "2h 5m",
                     "The Earth Defence Force leaves it to Godzilla to save the Earth from sinister aliens and the monsters they control. Will Godzilla save the world?",
@@ -368,7 +373,7 @@ class PreviewData {
                         )
                     ),
                     72f,
-                    LocalDate.of(2013, 4, 25),
+                    Date(2013, 4, 25),
                     listOf("Science Fiction", "Action"),
                     "2h 10m",
                     "Tony Stark encounters a formidable foe called the Mandarin. After failing to defeat his enemy, Tony embarks on a journey of self-discovery as he fights against the powerful Mandarin.",

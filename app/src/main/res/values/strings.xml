@@ -5,4 +5,5 @@
     <string name="title_favorite_screen">Favorites</string>
     <string name="search">Search</string>
     <string name="search_box_desc">Search box</string>
+    <string name="movie_overview">Overview</string>
 </resources>

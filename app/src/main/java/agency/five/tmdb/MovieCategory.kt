@@ -1,31 +1,29 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.data.MovieCategoryModel
 import agency.five.tmdb.ui.theme.TmdbTheme
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
 fun MovieCategory(
     modifier: Modifier = Modifier,
     categoryModel: MovieCategoryModel,
-    navController: NavController?
+    onClick: (String) -> Unit
 ) {
 
-    //Filmovi filtrirani po selektiranom tagu - Popular/Top rated
+    //Movies filtered by selected tag - Popular/Top rated
     var moviesToPresent by remember {
         mutableStateOf(categoryModel.movies)
     }
@@ -36,7 +34,7 @@ fun MovieCategory(
             .padding(vertical = 18.dp)
     ) {
 
-        Row() {
+        Row(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.horizontal_padding))) {
             Text(
                 text = categoryModel.categoryName,
                 style = MaterialTheme.typography.h1,
@@ -44,43 +42,43 @@ fun MovieCategory(
             )
         }
 
-        var state by remember {
+        var scrollableTabRowState by remember {
             mutableStateOf(0)
         }
 
         ScrollableTabRow(
-            selectedTabIndex = state,
+            selectedTabIndex = scrollableTabRowState,
             modifier.padding(bottom = 16.dp),
             indicator = {
                 TabRowDefaults.Indicator(
                     modifier = Modifier
-                        .tabIndicatorOffset(it[state]),
+                        .tabIndicatorOffset(it[scrollableTabRowState]),
                     color = MaterialTheme.colors.primary,
                     height = 4.dp
                 )
             },
             divider = {},
             backgroundColor = Color.White,
-            edgePadding = 0.dp
+            edgePadding = dimensionResource(id = R.dimen.horizontal_padding)
         ) {
             categoryModel.tags.forEachIndexed { index, title ->
                 Tab(
                     text = {
                         Text(
                             text = title,
-                            color = if (state == index)
+                            color = if (scrollableTabRowState == index)
                                 MaterialTheme.colors.primary
                             else
                                 MaterialTheme.colors.secondary,
-                            style = if (state == index) MaterialTheme.typography.body2
+                            style = if (scrollableTabRowState == index) MaterialTheme.typography.body2
                             else MaterialTheme.typography.body1
                         )
                     },
-                    selected = state == index,
+                    selected = scrollableTabRowState == index,
                     onClick = {
-                        state = index
+                        scrollableTabRowState = index
 
-                        val tagSelected = categoryModel.tags[state]
+                        val tagSelected = categoryModel.tags[scrollableTabRowState]
                         val moviesByTags =
                             categoryModel.movies.filter { movie -> movie.tags.contains(tagSelected) }
                         moviesToPresent = moviesByTags
@@ -90,30 +88,25 @@ fun MovieCategory(
 
         }
 
-
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.horizontal_padding)),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(moviesToPresent.size) { index ->
 
                 val movie = moviesToPresent[index]
-                Movie(movie = movie, navController = navController)
+                Movie(movie = movie, onClick = onClick)
             }
         }
     }
 }
 
 
-data class MovieCategoryModel(
-    val categoryId: Long,
-    val categoryName: String,
-    val tags: List<String>,
-    var movies: List<MovieModel>
-)
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun categoriesPreview() {
     TmdbTheme() {
-        MovieCategory(categoryModel = PreviewData.getCategories()[0], navController = null)
+        MovieCategory(categoryModel = PreviewData.getCategories()[0], onClick = {})
     }
 }

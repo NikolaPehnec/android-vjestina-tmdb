@@ -1,8 +1,8 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.data.CastModel
 import agency.five.tmdb.ui.theme.Gray3
 import agency.five.tmdb.ui.theme.TmdbTheme
-import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,10 +12,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.parcelize.Parcelize
+import coil.compose.rememberImagePainter
 
 @Composable
 fun Cast(
@@ -23,40 +23,44 @@ fun Cast(
 ) {
     Card(
         modifier = Modifier
-            .sizeIn(maxWidth = 120.dp),
-        shape = RoundedCornerShape(8.dp),
+            .sizeIn(maxWidth = dimensionResource(id = R.dimen.cast_picture_max_width))
+            .height(
+                dimensionResource(id = R.dimen.cast_card_height)
+            ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.cast_picture_rounded_corner)),
         elevation = 5.dp
     ) {
         Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Image(
-                painter = painterResource(id = cast.imageId),
+                painter = rememberImagePainter(data = cast.imageUrl, builder = {
+                    R.drawable.robert_downey
+                }),
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(dimensionResource(id = R.dimen.cast_picture_max_width))
                     .fillMaxWidth(),
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )
 
-            Column(
+            Row(
                 modifier = Modifier
-                    .height(90.dp)
-                    .padding(horizontal = 7.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                    .padding(horizontal = dimensionResource(id = R.dimen.cast_info_horizontal_padding))
+                    .padding(top = dimensionResource(id = R.dimen.cast_info_top_padding))
             ) {
-                Row() {
-                    Text(
-                        cast.nameSurname,
-                        style = MaterialTheme.typography.h3,
-                    )
-                }
-                Row() {
-                    Text(
-                        cast.roleName,
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Gray3
-                    )
-                }
+                Text(
+                    cast.nameSurname,
+                    style = MaterialTheme.typography.h3,
+                )
+            }
+
+            Row(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.cast_info_horizontal_padding))) {
+                Text(
+                    cast.roleName,
+                    style = MaterialTheme.typography.subtitle1,
+                    color = Gray3
+                )
             }
 
 
@@ -64,11 +68,6 @@ fun Cast(
     }
 }
 
-data class CastModel(
-    val nameSurname: String,
-    val roleName: String,
-    val imageId: Int
-)
 
 @Composable
 @Preview
@@ -78,7 +77,7 @@ fun CastPreview() {
             cast = CastModel(
                 "Robert Downey Jr.",
                 "Tony Stark/Iron man",
-                R.drawable.robert_downey
+                R.drawable.iron_man
             )
         )
     }

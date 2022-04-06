@@ -70,12 +70,15 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     navController.navigate(item.route) {
 
-                        //Popam stack jer je uvjet za back strelicu da back stack nije null -> jedino kad se ucita detail
-                        navController.popBackStack()
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route)
+                        }
+
                         // Avoid multiple copies of the same destination when re-selecting the same item
                         launchSingleTop = true
-                        // Restore state when re-selecting a previously selected item
-                        restoreState = true
                     }
                 })
         }
