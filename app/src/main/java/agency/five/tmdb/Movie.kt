@@ -21,12 +21,11 @@ import coil.compose.rememberImagePainter
 @Composable
 fun Movie(
     movie: MovieModel,
-    onClick: (String) -> Unit
+    onMovieCardClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier.clickable {
-            val movieId = movie.id
-            onClick("movieDetailScreen/$movieId")
+            onMovieCardClick(movie.id.toString())
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.movie_picture_rounded_corner)),
     ) {

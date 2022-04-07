@@ -23,7 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>, onClick: (String) -> Unit) {
+fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>,
+               onMovieCardClick: (String) -> Unit) {
 
     Column(
         Modifier
@@ -41,7 +42,7 @@ fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>, onClick: (Strin
 
                 MovieCategory(
                     categoryModel = categoryModel,
-                    onClick = onClick
+                    onMovieCardClick = onMovieCardClick
                 )
             }
         }

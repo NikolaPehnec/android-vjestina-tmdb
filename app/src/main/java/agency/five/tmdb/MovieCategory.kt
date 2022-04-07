@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 fun MovieCategory(
     modifier: Modifier = Modifier,
     categoryModel: MovieCategoryModel,
-    onClick: (String) -> Unit
+    onMovieCardClick: (String) -> Unit
 ) {
 
     //Movies filtered by selected tag - Popular/Top rated
@@ -95,7 +95,7 @@ fun MovieCategory(
             items(moviesToPresent.size) { index ->
 
                 val movie = moviesToPresent[index]
-                Movie(movie = movie, onClick = onClick)
+                Movie(movie = movie, onMovieCardClick = onMovieCardClick)
             }
         }
     }
@@ -107,6 +107,6 @@ fun MovieCategory(
 @Preview
 fun categoriesPreview() {
     TmdbTheme() {
-        MovieCategory(categoryModel = PreviewData.getCategories()[0], onClick = {})
+        MovieCategory(categoryModel = PreviewData.getCategories()[0], onMovieCardClick = {})
     }
 }

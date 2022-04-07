@@ -44,26 +44,23 @@ fun Cast(
                 contentDescription = null
             )
 
-            Row(
+            Text(
+                cast.nameSurname,
                 modifier = Modifier
                     .padding(horizontal = dimensionResource(id = R.dimen.cast_info_horizontal_padding))
-                    .padding(top = dimensionResource(id = R.dimen.cast_info_top_padding))
-            ) {
-                Text(
-                    cast.nameSurname,
-                    style = MaterialTheme.typography.h3,
-                )
-            }
+                    .padding(top = dimensionResource(id = R.dimen.cast_info_top_padding)),
+                style = MaterialTheme.typography.h3,
+            )
 
-            Row(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.cast_info_horizontal_padding))) {
-                Text(
-                    cast.roleName,
-                    style = MaterialTheme.typography.subtitle1,
-                    color = Gray3
-                )
-            }
-
-
+            Text(
+                cast.roleName,
+                modifier = Modifier.padding(
+                    horizontal =
+                    dimensionResource(id = R.dimen.cast_info_horizontal_padding)
+                ),
+                style = MaterialTheme.typography.subtitle1,
+                color = Gray3
+            )
         }
     }
 }
@@ -77,7 +74,7 @@ fun CastPreview() {
             cast = CastModel(
                 "Robert Downey Jr.",
                 "Tony Stark/Iron man",
-                R.drawable.iron_man
+                R.drawable.robert_downey
             )
         )
     }

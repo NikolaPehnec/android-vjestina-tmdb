@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FavoriteScreen(movieModelList: List<MovieModel>, onClick: (String) -> Unit) {
+fun FavoriteScreen(movieModelList: List<MovieModel>, onMovieCardClick: (String) -> Unit) {
     val favoriteMovies = movieModelList.filter { movie -> movie.isFavorite }
 
     Column(
@@ -49,7 +49,7 @@ fun FavoriteScreen(movieModelList: List<MovieModel>, onClick: (String) -> Unit) 
                     ),
                 ) {
                     val movie = favoriteMovies[index]
-                    Movie(movie = movie, onClick = onClick)
+                    Movie(movie = movie, onMovieCardClick = onMovieCardClick)
                 }
             }
         }

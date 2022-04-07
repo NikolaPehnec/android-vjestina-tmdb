@@ -396,12 +396,12 @@ fun NavigationSetup(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) {
             HomeScreen(categories) { movieId ->
-                navController.navigate(movieId)
+                navController.navigate("movieDetailScreen/$movieId")
             }
         }
         composable(BottomNavItem.Favorite.route) {
             FavoriteScreen(movies) { movieId ->
-                navController.navigate(movieId)
+                navController.navigate("movieDetailScreen/$movieId")
             }
         }
         composable("movieDetailScreen/{movieId}", arguments = listOf(
