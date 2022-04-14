@@ -1,8 +1,15 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.DI.ViewModelModules
+import agency.five.tmdb.DI.mockDB
+import agency.five.tmdb.DI.movieApi
+import agency.five.tmdb.DI.repoModule
 import agency.five.tmdb.navigation.BottomNavigationBar
 import agency.five.tmdb.navigation.NavigationSetup
 import agency.five.tmdb.ui.theme.TmdbTheme
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
+import agency.five.tmdb.viewModel.HomeViewModel
+import agency.five.tmdb.viewModel.MovieDetailViewModel
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,11 +26,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.rememberNavController
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startKoin {
+            androidContext(this@MainActivity)
+            modules(repoModule, ViewModelModules, movieApi, mockDB)
+        }
+
+        val homeViewModel: HomeViewModel by viewModel()
+        val favoriteViewModel: FavoriteMoviesViewModel by viewModel()
+        val movieDetailViewModel: MovieDetailViewModel by viewModel()
 
         setContent {
             TmdbTheme {
@@ -63,7 +82,12 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(navController = navController)
                         }
                     ) {
-                        NavigationSetup(navController = navController)
+                        NavigationSetup(
+                            navController = navController,
+                            homeViewModel,
+                            favoriteViewModel,
+                            movieDetailViewModel
+                        )
                     }
                 }
             }

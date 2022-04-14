@@ -1,7 +1,6 @@
 package agency.five.tmdb
 
-import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.ui.theme.TmdbTheme
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,8 +22,10 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FavoriteScreen(movieModelList: List<MovieModel>, onMovieCardClick: (String) -> Unit) {
-    val favoriteMovies = movieModelList.filter { movie -> movie.isFavorite }
+fun FavoriteScreen(
+    favoriteMoviesViewModel: FavoriteMoviesViewModel,
+    onMovieCardClick: (String) -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -41,15 +42,19 @@ fun FavoriteScreen(movieModelList: List<MovieModel>, onMovieCardClick: (String) 
         }
 
         LazyVerticalGrid(cells = GridCells.Fixed(3)) {
-            items(favoriteMovies.size) { index ->
+            items(favoriteMoviesViewModel.getFavoriteMovies().size) { index ->
                 Row(
                     modifier = Modifier.padding(
                         vertical = 16.dp,
                         horizontal = dimensionResource(id = R.dimen.horizontal_indent)
                     ),
                 ) {
-                    val movie = favoriteMovies[index]
-                    Movie(movie = movie, onMovieCardClick = onMovieCardClick)
+                    val movie = favoriteMoviesViewModel.getFavoriteMovies()[index]
+                    Movie(
+                        movie = movie,
+                        favoriteMoviesViewModel,
+                        onMovieCardClick = onMovieCardClick
+                    )
                 }
             }
         }
@@ -60,7 +65,7 @@ fun FavoriteScreen(movieModelList: List<MovieModel>, onMovieCardClick: (String) 
 @Preview
 @Composable
 fun FavoriteScreenPreview() {
-    TmdbTheme() {
-        FavoriteScreen(PreviewData.getMovies(), {})
-    }
+    /* TmdbTheme() {
+         FavoriteScreen(PreviewData.getMovies(), {})
+     }*/
 }

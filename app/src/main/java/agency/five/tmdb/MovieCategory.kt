@@ -1,7 +1,8 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieCategoryModel
-import agency.five.tmdb.ui.theme.TmdbTheme
+import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -20,12 +21,14 @@ import androidx.compose.ui.unit.dp
 fun MovieCategory(
     modifier: Modifier = Modifier,
     categoryModel: MovieCategoryModel,
+    favoriteViewModel: FavoriteMoviesViewModel,
+    movies: List<MovieModel>,
     onMovieCardClick: (String) -> Unit
 ) {
 
     //Movies filtered by selected tag - Popular/Top rated
     var moviesToPresent by remember {
-        mutableStateOf(categoryModel.movies)
+        mutableStateOf(movies)
     }
 
     Column(
@@ -80,7 +83,7 @@ fun MovieCategory(
 
                         val tagSelected = categoryModel.tags[scrollableTabRowState]
                         val moviesByTags =
-                            categoryModel.movies.filter { movie -> movie.tags.contains(tagSelected) }
+                            movies.filter { movie -> movie.tags.contains(tagSelected) }
                         moviesToPresent = moviesByTags
                     }
                 )
@@ -95,7 +98,11 @@ fun MovieCategory(
             items(moviesToPresent.size) { index ->
 
                 val movie = moviesToPresent[index]
-                Movie(movie = movie, onMovieCardClick = onMovieCardClick)
+                Movie(
+                    movie = movie,
+                    favoriteMoviesViewModel = favoriteViewModel,
+                    onMovieCardClick = onMovieCardClick
+                )
             }
         }
     }
@@ -106,7 +113,7 @@ fun MovieCategory(
 @Composable
 @Preview
 fun categoriesPreview() {
-    TmdbTheme() {
+    /*TmdbTheme() {
         MovieCategory(categoryModel = PreviewData.getCategories()[0], onMovieCardClick = {})
-    }
+    }*/
 }

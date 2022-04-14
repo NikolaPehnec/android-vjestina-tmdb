@@ -1,8 +1,9 @@
 package agency.five.tmdb
 
-import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.MovieModel
 import agency.five.tmdb.ui.theme.Blue
-import agency.five.tmdb.ui.theme.TmdbTheme
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
+import agency.five.tmdb.viewModel.HomeViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
@@ -23,8 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>,
-               onMovieCardClick: (String) -> Unit) {
+fun HomeScreen(
+    homeViewModel: HomeViewModel,
+    favoriteViewModel: FavoriteMoviesViewModel,
+    onMovieCardClick: (String) -> Unit,
+) {
 
     Column(
         Modifier
@@ -34,17 +38,23 @@ fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>,
         SearchField()
 
         LazyColumn {
-            items(items = movieCategoryModelList) { categoryModel ->
-                categoryModel.movies =
-                    categoryModel.movies.filter { movie ->
-                        movie.categories.contains(categoryModel.categoryName)
-                    }
+
+            var movies: List<MovieModel>
+
+            items(items = homeViewModel.getAllCategories()) { categoryModel ->
+
+                movies = homeViewModel.getAllMovies().filter { movie ->
+                    movie.categories.contains(categoryModel.categoryName)
+                }
 
                 MovieCategory(
                     categoryModel = categoryModel,
+                    movies = movies,
+                    favoriteViewModel = favoriteViewModel,
                     onMovieCardClick = onMovieCardClick
                 )
             }
+
         }
     }
 }
@@ -82,9 +92,9 @@ fun SearchField() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    TmdbTheme() {
+/*    TmdbTheme() {
         HomeScreen(PreviewData.getCategories(), {})
-    }
+    }*/
 }
 
 

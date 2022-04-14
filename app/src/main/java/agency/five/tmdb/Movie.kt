@@ -1,6 +1,7 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -21,6 +22,7 @@ import coil.compose.rememberImagePainter
 @Composable
 fun Movie(
     movie: MovieModel,
+    favoriteMoviesViewModel: FavoriteMoviesViewModel,
     onMovieCardClick: (String) -> Unit
 ) {
     Card(
@@ -34,7 +36,7 @@ fun Movie(
             placeholder(R.drawable.iron_man)
         }), contentDescription = null)
         Column() {
-            FavoriteButton(movie)
+            FavoriteButton(movie, favoriteMoviesViewModel)
         }
     }
 }
@@ -42,6 +44,7 @@ fun Movie(
 @Composable
 fun FavoriteButton(
     movie: MovieModel,
+    favoriteMoviesViewModel: FavoriteMoviesViewModel
 ) {
     var isFavorite by remember {
         mutableStateOf(movie.isFavorite)
@@ -52,6 +55,7 @@ fun FavoriteButton(
         onCheckedChange = {
             isFavorite = !isFavorite
             movie.isFavorite = !movie.isFavorite
+            favoriteMoviesViewModel.markMovieFavourite(movie = movie, it)
         })
     {
         Icon(
@@ -69,6 +73,6 @@ fun FavoriteButton(
 @Composable
 @Preview
 fun MoviePreview() {
-    Movie(PreviewData.getMovies().get(0), { })
+/*    Movie(PreviewData.getMovies().get(0), { })*/
 }
 
