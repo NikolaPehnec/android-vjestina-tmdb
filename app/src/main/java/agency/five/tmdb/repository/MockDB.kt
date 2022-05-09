@@ -2,6 +2,7 @@ package agency.five.tmdb.repository
 
 import agency.five.tmdb.R
 import agency.five.tmdb.data.CastModel
+import agency.five.tmdb.data.MovieCategoryModel
 import agency.five.tmdb.data.MovieModel
 import agency.five.tmdb.data.Writer
 import java.util.*
@@ -361,6 +362,16 @@ class MockDB() {
     fun getFavoriteMovies(): List<MovieModel> {
         return movies.filter { movie -> movie.isFavorite }
     }
+
+    val tagsWhatsPopular = listOf("Popular", "Top rated")
+    val tagsNowPlaying = listOf("Streaming", "On TV", "For Rent", "In theaters")
+    val tagsUpcoming = listOf("Today", "This week")
+
+    val categories = mutableListOf(
+        MovieCategoryModel(1, "What's popular", tagsWhatsPopular),
+        MovieCategoryModel(2, "Now playing", tagsNowPlaying),
+        MovieCategoryModel(3, "Upcoming", tagsUpcoming),
+    )
 
 
 }

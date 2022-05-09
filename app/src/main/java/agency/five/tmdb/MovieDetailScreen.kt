@@ -1,9 +1,11 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.PreviewData
 import agency.five.tmdb.data.Writer
 import agency.five.tmdb.ui.theme.GreenCircular
 import agency.five.tmdb.ui.theme.GreenCircular2
+import agency.five.tmdb.ui.theme.TmdbTheme
 import agency.five.tmdb.viewModel.MovieDetailViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -34,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,10 +46,13 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MovieDetailScreen(movieId: Long, movieDetailViewModel: MovieDetailViewModel) {
+fun MovieDetailScreen(movieId: Long) {
 
-    //MovieModel based on Movie ID from navigation
-    val movieModel: MovieModel = movieDetailViewModel.getMovieByID(movieId)!!
+    val movieDetailViewModel: MovieDetailViewModel = getViewModel(
+        parameters = { parametersOf(movieId) }
+    )
+
+    val movieModel: MovieModel = movieDetailViewModel.getMovieByID().collectAsState(initial = PreviewData.getMovies()[0]).value!!
     val verticalScrollState: ScrollState = rememberScrollState();
 
     Column(
@@ -315,7 +323,7 @@ fun CircularProgressBar(
 @Preview(device = Devices.PIXEL)
 fun movieDetailPreview() {
 
-    /*TmdbTheme() {
-        MovieDetailScreen(1, PreviewData.getMovies())
-    }*/
+    TmdbTheme() {
+        MovieDetailScreen(1)
+    }
 }

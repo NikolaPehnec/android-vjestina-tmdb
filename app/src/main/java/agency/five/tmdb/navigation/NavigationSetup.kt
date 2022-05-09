@@ -5,7 +5,6 @@ import agency.five.tmdb.HomeScreen
 import agency.five.tmdb.MovieDetailScreen
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import agency.five.tmdb.viewModel.HomeViewModel
-import agency.five.tmdb.viewModel.MovieDetailViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -18,20 +17,17 @@ import androidx.navigation.navArgument
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationSetup(
-    navController: NavHostController,
-    homeViewModel: HomeViewModel,
-    favoriteViewModel: FavoriteMoviesViewModel,
-    movieDetailViewModel: MovieDetailViewModel,
+    navController: NavHostController
 ) {
 
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen(homeViewModel, favoriteViewModel) { movieId ->
+            HomeScreen() { movieId ->
                 navController.navigate("movieDetailScreen/$movieId")
             }
         }
         composable(BottomNavItem.Favorite.route) {
-            FavoriteScreen(favoriteViewModel) { movieId ->
+            FavoriteScreen() { movieId ->
                 navController.navigate("movieDetailScreen/$movieId")
             }
         }
@@ -40,7 +36,7 @@ fun NavigationSetup(
                 type = NavType.LongType
             }
         )) {
-            MovieDetailScreen(it.arguments?.getLong("movieId")!!, movieDetailViewModel)
+            MovieDetailScreen(it.arguments?.getLong("movieId")!!)
         }
     }
 

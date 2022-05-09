@@ -9,34 +9,40 @@ import kotlinx.coroutines.flow.*
 class MovieRepositoryImpl(private val movieApi: MovieApi, private val mockDB: MockDB) :
     MoviesRepository {
 
-    override fun getMovies(): Flow<List<MovieModel>> {
-        return flow {
-            movieApi.getAllMovies().movies?.let {
-                emit(
-                    it
-                )
-            }
-        }
-    }
+    private val sharingScope = CoroutineScope(Dispatchers.Default)
 
-    override fun getCategories(): Flow<List<MovieCategoryModel>> {
-        return flow {
-            movieApi.getAllCategories().categories?.let {
-                emit(
-                    it
-                )
+    private val allMovies = flow { emit(mockDB.movies) }
+        .onStart {
+            movieApi.getAllMovies().movies?.let {
+                emit(it)
+                // use this in future
+                // mockDB.saveMovies(it)
             }
-        }
-    }
+        }.shareIn(
+            sharingScope,
+            SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L),
+            replay = 1
+        )
+
+    private val allCategories = flow { emit(mockDB.categories) }
+        .onStart {
+            movieApi.getAllCategories().categories?.let {
+                emit(it)
+                // use this in future
+                // mockDB.saveCategory(it)
+            }
+        }.shareIn(
+            sharingScope,
+            SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L),
+            replay = 1
+        )
+
+    override fun getMovies(): Flow<List<MovieModel>> = allMovies
+
+    override fun getCategories(): Flow<List<MovieCategoryModel>> = allCategories
 
     override fun getMovieByID(id: Long): Flow<MovieModel> {
-        return flow {
-            movieApi.getMovieByID(id)?.movie?.let {
-                emit(
-                    it
-                )
-            }
-        }
+        return allMovies.map { it.first { movie -> movie.id == id } }
     }
 
     private val favouriteMoviesPublisher = MutableSharedFlow<List<MovieModel>>()

@@ -6,7 +6,7 @@ import agency.five.tmdb.viewModel.MovieDetailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val ViewModelModules = module {
+val viewModelModules = module {
     viewModel {
         HomeViewModel(get())
     }
@@ -14,6 +14,6 @@ val ViewModelModules = module {
         FavoriteMoviesViewModel(get())
     }
     viewModel {
-        MovieDetailViewModel(get())
+        MovieDetailViewModel(get(), get())
     }
 }

@@ -2,7 +2,6 @@ package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieCategoryModel
 import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -21,9 +20,9 @@ import androidx.compose.ui.unit.dp
 fun MovieCategory(
     modifier: Modifier = Modifier,
     categoryModel: MovieCategoryModel,
-    favoriteViewModel: FavoriteMoviesViewModel,
     movies: List<MovieModel>,
-    onMovieCardClick: (String) -> Unit
+    onMovieCardClick: (String) -> Unit,
+    markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
 ) {
 
     //Movies filtered by selected tag - Popular/Top rated
@@ -100,8 +99,8 @@ fun MovieCategory(
                 val movie = moviesToPresent[index]
                 Movie(
                     movie = movie,
-                    favoriteMoviesViewModel = favoriteViewModel,
-                    onMovieCardClick = onMovieCardClick
+                    onMovieCardClick = onMovieCardClick,
+                    markMovieAsFavorite = markMovieAsFavorite
                 )
             }
         }

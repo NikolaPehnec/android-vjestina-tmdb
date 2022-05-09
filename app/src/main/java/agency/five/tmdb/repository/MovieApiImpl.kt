@@ -25,12 +25,12 @@ class MovieApiImpl : MovieApi {
 
 
 data class MovieResponse(
-    val movies: List<MovieModel>?,
-    val categories: List<MovieCategoryModel>?,
+    val movies: MutableList<MovieModel>?,
+    val categories: MutableList<MovieCategoryModel>?,
     val movie: MovieModel?
 )
 
-val allMovies = listOf(
+val allMovies = mutableListOf(
     MovieModel(
         1,
         "Iron man",
@@ -189,7 +189,7 @@ val allMovies = listOf(
         "Puppy love",
         R.drawable.puppylove,
         listOf("Now playing"),
-        listOf("Streaming", "On TV","In theaters"),
+        listOf("Streaming", "On TV", "In theaters"),
         listOf(
             Writer("Don Heck", "Characters"),
             Writer("Jack Kirby", "Characters"),
@@ -380,7 +380,7 @@ val tagsWhatsPopular = listOf("Popular", "Top rated")
 val tagsNowPlaying = listOf("Streaming", "On TV", "For Rent", "In theaters")
 val tagsUpcoming = listOf("Today", "This week")
 
-val categories = listOf(
+val categories = mutableListOf(
     MovieCategoryModel(1, "What's popular", tagsWhatsPopular),
     MovieCategoryModel(2, "Now playing", tagsNowPlaying),
     MovieCategoryModel(3, "Upcoming", tagsUpcoming),

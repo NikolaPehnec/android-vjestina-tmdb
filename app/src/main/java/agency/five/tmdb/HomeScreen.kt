@@ -1,5 +1,6 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.data.MovieCategoryModel
 import agency.five.tmdb.data.MovieModel
 import agency.five.tmdb.ui.theme.Blue
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
@@ -16,19 +17,27 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.getViewModel
+
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel,
-    favoriteViewModel: FavoriteMoviesViewModel,
     onMovieCardClick: (String) -> Unit,
 ) {
+    val homeViewModel: HomeViewModel = getViewModel()
+    val favoriteViewModel: FavoriteMoviesViewModel=getViewModel()
+
+    val allMovies: List<MovieModel> =
+        homeViewModel.getAllMovies().collectAsState(initial = listOf()).value
+    val allCategories: List<MovieCategoryModel> =
+        homeViewModel.getAllCategories().collectAsState(initial = listOf()).value
 
     Column(
         Modifier
@@ -41,18 +50,19 @@ fun HomeScreen(
 
             var movies: List<MovieModel>
 
-            items(items = homeViewModel.getAllCategories()) { categoryModel ->
+            items(items = allCategories) { categoryModel ->
 
-                movies = homeViewModel.getAllMovies().filter { movie ->
+                movies = allMovies.filter { movie ->
                     movie.categories.contains(categoryModel.categoryName)
                 }
 
                 MovieCategory(
                     categoryModel = categoryModel,
                     movies = movies,
-                    favoriteViewModel = favoriteViewModel,
-                    onMovieCardClick = onMovieCardClick
-                )
+                    onMovieCardClick = onMovieCardClick,
+                ) { movie, isFavorite ->
+                    favoriteViewModel.markMovieFavourite(movie, isFavorite)
+                }
             }
 
         }
