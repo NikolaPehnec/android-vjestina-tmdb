@@ -1,6 +1,8 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.PreviewData
+import agency.five.tmdb.ui.theme.TmdbTheme
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -23,16 +25,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteScreen(
     onMovieCardClick: (String) -> Unit
 ) {
     val favoriteViewModel: FavoriteMoviesViewModel = getViewModel()
-
     val favoriteMovies: List<MovieModel> = favoriteViewModel.getFavoriteMovies()
         .collectAsState(initial = listOf()).value
 
+    FavoriteContent(favoriteMovies = favoriteMovies,
+        onMovieCardClick = onMovieCardClick,
+        markMovieAsFavorite = { movie, isFavorite ->
+            {
+                favoriteViewModel.markMovieFavourite(movie, isFavorite)
+            }
+        })
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun FavoriteContent(
+    favoriteMovies: List<MovieModel>,
+    onMovieCardClick: (String) -> Unit,
+    markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
+) {
     Column(
         modifier = Modifier
             .background(Color.White)
@@ -58,10 +75,9 @@ fun FavoriteScreen(
                     val movie = favoriteMovies[index]
                     Movie(
                         movie = movie,
-                        onMovieCardClick = onMovieCardClick
-                    ) { movie, isFavorite ->
-                        favoriteViewModel.markMovieFavourite(movie, isFavorite)
-                    }
+                        onMovieCardClick = onMovieCardClick,
+                        markMovieAsFavorite = markMovieAsFavorite
+                    )
                 }
             }
         }
@@ -72,7 +88,7 @@ fun FavoriteScreen(
 @Preview
 @Composable
 fun FavoriteScreenPreview() {
-    /* TmdbTheme() {
-         FavoriteScreen(getViewModel(), {})
-     }*/
+    TmdbTheme() {
+        FavoriteContent(PreviewData.getMovies(), {}, { _, _ -> {} })
+    }
 }

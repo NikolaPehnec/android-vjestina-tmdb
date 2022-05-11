@@ -1,6 +1,7 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.PreviewData
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -22,7 +23,7 @@ import coil.compose.rememberImagePainter
 fun Movie(
     movie: MovieModel,
     onMovieCardClick: (String) -> Unit,
-    markMovieAsFavorite: (movie: MovieModel, isFavourite: Boolean) -> Unit,
+    markMovieAsFavorite: (movie: MovieModel, isFavourite: Boolean) -> Unit
 ) {
     Card(
         modifier = Modifier.clickable {
@@ -72,6 +73,6 @@ fun FavoriteButton(
 @Composable
 @Preview
 fun MoviePreview() {
-/*    Movie(PreviewData.getMovies().get(0), { })*/
+    Movie(PreviewData.getMovies().get(0), { }, { _, _ -> })
 }
 

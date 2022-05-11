@@ -2,6 +2,8 @@ package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieCategoryModel
 import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.PreviewData
+import agency.five.tmdb.ui.theme.TmdbTheme
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -112,7 +114,10 @@ fun MovieCategory(
 @Composable
 @Preview
 fun categoriesPreview() {
-    /*TmdbTheme() {
-        MovieCategory(categoryModel = PreviewData.getCategories()[0], onMovieCardClick = {})
-    }*/
+    TmdbTheme() {
+        MovieCategory(categoryModel = PreviewData.getCategories()[0],
+            movies = PreviewData.getMovies(),
+            onMovieCardClick = {},
+            markMovieAsFavorite = { _, _ -> })
+    }
 }
