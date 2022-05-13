@@ -1,9 +1,6 @@
-package agency.five.tmdb
+package agency.five.tmdb.data
 
-import agency.five.tmdb.data.CastModel
-import agency.five.tmdb.data.MovieCategoryModel
-import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.data.Writer
+import agency.five.tmdb.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.util.*
@@ -26,9 +23,9 @@ class PreviewData {
         @RequiresApi(Build.VERSION_CODES.O)
         fun getCategories(): List<MovieCategoryModel> {
             return listOf(
-                MovieCategoryModel(1, "What's popular", getTagsWhatsPopular(), getMovies()),
-                MovieCategoryModel(1, "Now playing", getTagsNowPlaying(), getMovies()),
-                MovieCategoryModel(1, "Upcoming", geTagsUpcoming(), getMovies()),
+                MovieCategoryModel(1, "What's popular", getTagsWhatsPopular()),
+                MovieCategoryModel(1, "Now playing", getTagsNowPlaying()),
+                MovieCategoryModel(1, "Upcoming", geTagsUpcoming()),
             )
         }
 

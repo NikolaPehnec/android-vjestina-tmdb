@@ -1,8 +1,12 @@
 package agency.five.tmdb
 
 import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.MovieModel
+import agency.five.tmdb.data.PreviewData
 import agency.five.tmdb.ui.theme.Blue
 import agency.five.tmdb.ui.theme.TmdbTheme
+import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
+import agency.five.tmdb.viewModel.HomeViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
@@ -15,17 +19,45 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>,
-               onMovieCardClick: (String) -> Unit) {
+fun HomeScreen(
+    onMovieCardClick: (String) -> Unit,
+) {
+    val homeViewModel: HomeViewModel = getViewModel()
+    val favoriteViewModel: FavoriteMoviesViewModel = getViewModel()
 
+    val allMovies: List<MovieModel> =
+        homeViewModel.getAllMovies().collectAsState(initial = listOf()).value
+    val allCategories: List<MovieCategoryModel> =
+        homeViewModel.getAllCategories().collectAsState(initial = listOf()).value
+
+    HomeContent(
+        allMovies,
+        allCategories,
+        onMovieCardClick = onMovieCardClick,
+        markMovieAsFavorite = { movie, isFavorite ->
+            {
+                favoriteViewModel.markMovieFavourite(movie, isFavorite)
+            }
+        })
+}
+
+@Composable
+fun HomeContent(
+    allMovies: List<MovieModel>,
+    allCategories: List<MovieCategoryModel>,
+    onMovieCardClick: (String) -> Unit,
+    markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
+) {
     Column(
         Modifier
             .padding(bottom = dimensionResource(id = R.dimen.bottom_padding_big))
@@ -34,17 +66,23 @@ fun HomeScreen(movieCategoryModelList: List<MovieCategoryModel>,
         SearchField()
 
         LazyColumn {
-            items(items = movieCategoryModelList) { categoryModel ->
-                categoryModel.movies =
-                    categoryModel.movies.filter { movie ->
-                        movie.categories.contains(categoryModel.categoryName)
-                    }
+
+            var movies: List<MovieModel>
+
+            items(items = allCategories) { categoryModel ->
+
+                movies = allMovies.filter { movie ->
+                    movie.categories.contains(categoryModel.categoryName)
+                }
 
                 MovieCategory(
                     categoryModel = categoryModel,
-                    onMovieCardClick = onMovieCardClick
+                    movies = movies,
+                    onMovieCardClick = onMovieCardClick,
+                    markMovieAsFavorite = markMovieAsFavorite
                 )
             }
+
         }
     }
 }
@@ -83,7 +121,12 @@ fun SearchField() {
 @Composable
 fun HomeScreenPreview() {
     TmdbTheme() {
-        HomeScreen(PreviewData.getCategories(), {})
+        HomeContent(
+            PreviewData.getMovies(),
+            PreviewData.getCategories(),
+            onMovieCardClick = { {} },
+            markMovieAsFavorite = { _, _ -> {} }
+        )
     }
 }
 

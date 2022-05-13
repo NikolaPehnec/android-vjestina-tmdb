@@ -1,5 +1,9 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.DI.viewModelModules
+import agency.five.tmdb.DI.mockDB
+import agency.five.tmdb.DI.movieApi
+import agency.five.tmdb.DI.repoModule
 import agency.five.tmdb.navigation.BottomNavigationBar
 import agency.five.tmdb.navigation.NavigationSetup
 import agency.five.tmdb.ui.theme.TmdbTheme
@@ -19,11 +23,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.rememberNavController
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startKoin {
+            androidContext(this@MainActivity)
+            modules(repoModule, viewModelModules, movieApi, mockDB)
+        }
 
         setContent {
             TmdbTheme {
@@ -63,7 +74,9 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(navController = navController)
                         }
                     ) {
-                        NavigationSetup(navController = navController)
+                        NavigationSetup(
+                            navController = navController
+                        )
                     }
                 }
             }
