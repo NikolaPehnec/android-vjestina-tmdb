@@ -53,7 +53,7 @@ val Typography = Typography(
             Font(R.font.proxima_nova_extrabold, FontWeight.ExtraBold)
         ),
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 28.sp,
+        fontSize = 24.sp,
     ),
     h6 = TextStyle(
         fontFamily = FontFamily(
@@ -62,7 +62,7 @@ val Typography = Typography(
             Font(R.font.proxima_nova_extrabold, FontWeight.ExtraBold)
         ),
         fontWeight = FontWeight.Normal,
-        fontSize = 28.sp,
+        fontSize = 24.sp,
     ),
 
     body1 = TextStyle(

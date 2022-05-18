@@ -22,15 +22,18 @@ import androidx.compose.ui.unit.dp
 fun MovieCategory(
     modifier: Modifier = Modifier,
     categoryModel: MovieCategoryModel,
-    movies: List<MovieModel>,
+    movies: MutableList<MovieModel>,
     onMovieCardClick: (String) -> Unit,
     markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
 ) {
 
     //Movies filtered by selected tag - Popular/Top rated
-    var moviesToPresent by remember {
-        mutableStateOf(movies)
+    val moviesToPresent = remember { mutableStateListOf<MovieModel>() }
+
+    if (moviesToPresent.size == 0) {
+        moviesToPresent.addAll(movies.filter { movie -> movie.tags.contains(categoryModel.tags[0]) })
     }
+
 
     Column(
         modifier
@@ -85,7 +88,8 @@ fun MovieCategory(
                         val tagSelected = categoryModel.tags[scrollableTabRowState]
                         val moviesByTags =
                             movies.filter { movie -> movie.tags.contains(tagSelected) }
-                        moviesToPresent = moviesByTags
+                        moviesToPresent.clear()
+                        moviesToPresent.addAll(moviesByTags)
                     }
                 )
             }
@@ -116,7 +120,7 @@ fun MovieCategory(
 fun categoriesPreview() {
     TmdbTheme() {
         MovieCategory(categoryModel = PreviewData.getCategories()[0],
-            movies = PreviewData.getMovies(),
+            movies = mutableListOf(),
             onMovieCardClick = {},
             markMovieAsFavorite = { _, _ -> })
     }

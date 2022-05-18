@@ -3,8 +3,7 @@ package agency.five.tmdb.navigation
 import agency.five.tmdb.FavoriteScreen
 import agency.five.tmdb.HomeScreen
 import agency.five.tmdb.MovieDetailScreen
-import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
-import agency.five.tmdb.viewModel.HomeViewModel
+import agency.five.tmdb.MovieSearchScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -22,7 +21,9 @@ fun NavigationSetup(
 
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen() { movieId ->
+            HomeScreen({ query -> navController.navigate("movieSearchScreen/$query") }
+
+            ) { movieId ->
                 navController.navigate("movieDetailScreen/$movieId")
             }
         }
@@ -37,6 +38,15 @@ fun NavigationSetup(
             }
         )) {
             MovieDetailScreen(it.arguments?.getLong("movieId")!!)
+        }
+        composable("movieSearchScreen/{query}", arguments = listOf(
+            navArgument("query") {
+                type = NavType.StringType
+            }
+        )) {
+            MovieSearchScreen(it.arguments?.getString("query")!!){ movieId ->
+                navController.navigate("movieDetailScreen/$movieId")
+            }
         }
     }
 

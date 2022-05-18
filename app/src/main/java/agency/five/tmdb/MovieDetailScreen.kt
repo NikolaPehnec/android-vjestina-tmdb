@@ -1,8 +1,8 @@
 package agency.five.tmdb
 
+import agency.five.tmdb.data.CastModel
 import agency.five.tmdb.data.MovieModel
 import agency.five.tmdb.data.PreviewData
-import agency.five.tmdb.data.Writer
 import agency.five.tmdb.ui.theme.GreenCircular
 import agency.five.tmdb.ui.theme.GreenCircular2
 import agency.five.tmdb.ui.theme.TmdbTheme
@@ -14,8 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -34,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
@@ -52,7 +52,18 @@ fun MovieDetailScreen(movieId: Long) {
         parameters = { parametersOf(movieId) }
     )
 
-    val movieModel: MovieModel = movieDetailViewModel.getMovieByID().collectAsState(initial = PreviewData.getMovies()[0]).value!!
+    val movieModel = remember { mutableStateOf(PreviewData.getMovies()[0]) }
+     movieModel.value = movieDetailViewModel.getMovieByID()
+        .collectAsState(initial = PreviewData.getMovies()[0]).value!!
+
+    val castAndCrew = remember {
+        mutableListOf<CastModel>()
+    }
+
+    castAndCrew.addAll(
+        movieDetailViewModel.getMovieCredits().collectAsState(initial = listOf()).value
+    )
+
     val verticalScrollState: ScrollState = rememberScrollState();
 
     Column(
@@ -61,13 +72,13 @@ fun MovieDetailScreen(movieId: Long) {
             .verticalScroll(state = verticalScrollState, enabled = true)
     ) {
 
-        BasicMovieInfo(movieModel = movieModel)
+        BasicMovieInfo(movieModel = movieModel.value)
 
-        MovieOverview(movieModel = movieModel)
+        MovieOverview(movieModel = movieModel.value)
 
-        MovieWriters(writers = movieModel.writers)
+        MovieWriters(crew = castAndCrew.filter { it.castOrCrew.equals("crew") }.take(6))
 
-        MovieCast(movieModel = movieModel)
+        MovieCast(cast = castAndCrew.filter { it.castOrCrew.equals("cast") })
 
     }
 }
@@ -80,7 +91,7 @@ fun BasicMovieInfo(movieModel: MovieModel) {
             .height(dimensionResource(id = R.dimen.movie_info_height))
     ) {
         Image(
-            painter = painterResource(id = movieModel.imageUrl),
+            painter = rememberAsyncImagePainter(movieModel.imageUrl),
             "",
             modifier = Modifier
                 .fillMaxWidth()
@@ -138,7 +149,7 @@ fun BasicMovieInfo(movieModel: MovieModel) {
                     color = Color.White
                 )
                 Text(
-                    " (" + movieModel.date.year.toString() + ")",
+                    " (" + movieModel.date!!.year.toString() + ")",
                     style = MaterialTheme.typography.h6,
                     color = Color.White
                 )
@@ -148,7 +159,7 @@ fun BasicMovieInfo(movieModel: MovieModel) {
                 //Waiting for date from api to fix this
                 val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/", Locale.US)
                 Text(
-                    dateFormat.format(movieModel.date) + movieModel.date.year + " (US)",
+                    dateFormat.format(movieModel.date) + movieModel.date!!.year + " (US)",
                     style = MaterialTheme.typography.h2,
                     color = Color.White
                 )
@@ -173,9 +184,6 @@ fun BasicMovieInfo(movieModel: MovieModel) {
     }
 }
 
-fun formattedDate(movieDate: Date): String {
-    return movieDate.day.toString() + "/" + movieDate.month.toString() + "/" + movieDate.year.toString()
-}
 
 @Composable
 fun MovieOverview(movieModel: MovieModel) {
@@ -203,13 +211,13 @@ fun MovieOverview(movieModel: MovieModel) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MovieWriters(writers: List<Writer>) {
+fun MovieWriters(crew: List<CastModel>) {
     val itemWidth: Dp = LocalConfiguration.current.screenWidthDp.dp / 3
 
     FlowRow(
         mainAxisSize = SizeMode.Expand, mainAxisAlignment = FlowMainAxisAlignment.SpaceEvenly
     ) {
-        writers.forEach { writer ->
+        crew.forEach { crewMember ->
             Column(
                 modifier = Modifier
                     .width(width = itemWidth)
@@ -220,14 +228,16 @@ fun MovieWriters(writers: List<Writer>) {
             ) {
                 Row() {
                     Text(
-                        writer.nameSurname,
+                        crewMember.nameSurname,
                         style = MaterialTheme.typography.h3,
                         color = Color.Black
                     )
                 }
                 Row() {
                     Text(
-                        writer.role, style = MaterialTheme.typography.h2, color = Color.Black
+                        crewMember.roleName,
+                        style = MaterialTheme.typography.h2,
+                        color = Color.Black
                     )
                 }
             }
@@ -236,7 +246,7 @@ fun MovieWriters(writers: List<Writer>) {
 }
 
 @Composable
-fun MovieCast(movieModel: MovieModel) {
+fun MovieCast(cast: List<CastModel>) {
     Row(
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.horizontal_padding))
@@ -270,9 +280,9 @@ fun MovieCast(movieModel: MovieModel) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.horizontal_padding))
     ) {
-        items(movieModel.cast.size) { index ->
+        items(cast.size) { index ->
 
-            val castMember = movieModel.cast[index]
+            val castMember = cast[index]
             Cast(cast = castMember)
         }
     }

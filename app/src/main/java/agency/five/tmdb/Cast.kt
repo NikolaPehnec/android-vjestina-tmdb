@@ -74,7 +74,8 @@ fun CastPreview() {
             cast = CastModel(
                 "Robert Downey Jr.",
                 "Tony Stark/Iron man",
-                R.drawable.robert_downey
+                "R.drawable.robert_downey",
+                "cast"
             )
         )
     }
