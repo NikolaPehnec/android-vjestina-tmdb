@@ -1,28 +1,21 @@
 package agency.five.tmdb.data
 
-import agency.five.tmdb.repository.CastMember
-import agency.five.tmdb.repository.CrewMember
+import agency.five.tmdb.repository.MovieCreditsModel
 
 data class CastModel(
     val nameSurname: String,
-    val roleName: String,
-    val imageUrl: String,
-    val castOrCrew:String
+    val roleName: String?,
+    val department: String?,
+    val imageUrl: String?,
 )
 
 const val BASE_IMAGE_URL2 = "https://image.tmdb.org/t/p/w200"
 
-fun CastMember.toCrewModel() = CastModel(
+fun MovieCreditsModel.toCrewModel() = CastModel(
     name,
     roleName,
-    picture?.let { "$BASE_IMAGE_URL2/$it" }.toString(),
-    "cast"
+    department?.let { it },
+    picture?.let { "$BASE_IMAGE_URL2/$it" }.toString()
 )
 
-fun CrewMember.toCrewModel() = CastModel(
-    name,
-    department,
-    "",
-    "crew"
-)
 

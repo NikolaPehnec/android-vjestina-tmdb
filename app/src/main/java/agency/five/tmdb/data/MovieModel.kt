@@ -2,6 +2,7 @@ package agency.five.tmdb.data
 
 import agency.five.tmdb.repository.MovieDetailResponse
 import agency.five.tmdb.repository.MovieResponse
+import android.content.Context
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,8 +13,7 @@ data class MovieModel(
     val imageUrl: String,
     val categories: List<String>,
     val tags: List<String>,
-    var crew: List<CastModel>,
-    var cast: List<CastModel>,
+    var castAndCew: List<CastModel>,
     val score: Float,
     val date: Date?,
     val genres: List<String>,
@@ -22,40 +22,34 @@ data class MovieModel(
     var isFavorite: Boolean
 )
 
+
 const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
 
-val categoryTag = mutableMapOf(
-    "What's popular" to listOf("Top rated", "Popular"),
-    "Now playing" to listOf("Streaming", "On TV", "For Rent", "In theaters"),
-    "Upcoming" to listOf("Today", "This Week")
-)
-
-fun MovieResponse.toMovie(isFavorite: Boolean, categoryName: String) = MovieModel(
-    id.toLong(),
-    title,
-    posterPath?.let { "$BASE_IMAGE_URL/$it" }.toString(),
-    listOf(categoryName),
-    listOf(categoryTag.get(categoryName)!!.random()),
-    listOf(),
-    listOf(),
-    popularity,
-    try {
-        SimpleDateFormat("yyyy-mm-dd").parse(releaseDate)
-    } catch (e: ParseException) {
-        Date(1, 1, 1)
-    },
-    // SimpleDateFormat("yyyy-mm-dd").parse(releaseDate),
-    genres.map { it.toString() },
-    runtime.toString(),
-    overview,
-    isFavorite
-)
+fun MovieResponse.toMovie(isFavorite: Boolean, category: Category, appContext: Context) =
+    MovieModel(
+        id.toLong(),
+        title,
+        posterPath?.let { "$BASE_IMAGE_URL/$it" }.toString(),
+        listOf(appContext.resources.getString(category.resourceId)),
+        listOf(category.tags.random()),
+        listOf(),
+        popularity,
+        try {
+            SimpleDateFormat("yyyy-mm-dd").parse(releaseDate)
+        } catch (e: ParseException) {
+            Date(1, 1, 1)
+        },
+        // SimpleDateFormat("yyyy-mm-dd").parse(releaseDate),
+        genres.map { it.toString() },
+        runtime.toString(),
+        overview,
+        isFavorite
+    )
 
 fun MovieDetailResponse.toMovie(isFavorite: Boolean, categoryName: String) = MovieModel(
     id.toLong(),
     title,
     posterPath?.let { "$BASE_IMAGE_URL/$it" }.toString(),
-    listOf(),
     listOf(),
     listOf(),
     listOf(),

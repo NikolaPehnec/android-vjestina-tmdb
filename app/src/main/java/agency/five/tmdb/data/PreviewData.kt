@@ -30,7 +30,6 @@ class PreviewData {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getMoviesForCategories(): MutableMap<MovieCategoryModel, List<MovieModel>> {
-
             var moviesForCategories: MutableMap<MovieCategoryModel, List<MovieModel>> =
                 mutableMapOf()
 
@@ -53,31 +52,29 @@ class PreviewData {
                     listOf("What's popular"),
                     listOf("Popular"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew")
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
-                            "Ben Schwartz",
-                            "Sonic the Hedgehog (voice)",
-                            "https://image.tmdb.org/t/p/w200/5vV52TSEIhe4ZZLWwv3i7nfv8we.jpg",
-                            "cast"
+                            "Robert Downey Jr.",
+                            "Tony Stark/Iron man",
+                            null,
+                            "image"
                         ),
                         CastModel(
-                            "Idris Elba",
-                            "Knuckles the Echidna (voice)",
-                            "https://image.tmdb.org/t/p/w200/be1bVF7qGX91a6c5WeRPs5pKXln.jpg",
-                            "cast"
+                            "Terrence Howard",
+                            "James Rhodes",
+                            null,
+                            "image"
                         ),
                         CastModel(
-                            "Jim Carrey",
-                            "Miles 'Tails' Prower (voice)",
-                            "https://image.tmdb.org/t/p/w200/u0AqTz6Y7GHPCHINS01P7gPvDSb.jpg",
-                            "cast"
+                            "Jeff Bridges",
+                            "Obadiah Stane/Iron Monger",
+                            null,
+                            "image"
                         )
                     ),
                     75f,
@@ -96,31 +93,29 @@ class PreviewData {
                     listOf("What's popular"),
                     listOf("Popular"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew")
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     78f,
@@ -137,32 +132,29 @@ class PreviewData {
                     listOf("What's popular"),
                     listOf("Popular"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew")
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
-
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard", "cast"
-
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges", "cast"
-
+                            null,
+                            "image"
                         )
                     ),
                     85f,
@@ -179,31 +171,29 @@ class PreviewData {
                     listOf("Now playing", "Upcoming"),
                     listOf("Streaming", "On TV", "Today"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew")
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     55f,
@@ -220,31 +210,29 @@ class PreviewData {
                     listOf("Now playing"),
                     listOf("Streaming"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     56f,
@@ -261,31 +249,29 @@ class PreviewData {
                     listOf("Now playing"),
                     listOf("On TV"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     78f,
@@ -302,31 +288,29 @@ class PreviewData {
                     listOf("Now playing"),
                     listOf("In theatre"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     88f,
@@ -343,31 +327,29 @@ class PreviewData {
                     listOf("Upcoming"),
                     listOf("Today"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     63f,
@@ -384,31 +366,29 @@ class PreviewData {
                     listOf("Upcoming"),
                     listOf("This week"),
                     listOf(
-                        CastModel("Don Heck", "Characters", "", "crew"),
-                        CastModel("Jack Kirby", "Characters", "", "crew"),
-                        CastModel("Jon Favreau", "Director", "", "crew"),
-                        CastModel("Don Heck", "Screenplay", "", "crew"),
-                        CastModel("Jack Macrum", "Screenplay", "", "crew"),
-                        CastModel("Matt Holloway", "Screenplay", "", "crew")
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            "R.drawable.robert_downey",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            "R.drawable.terrence_howard",
-                            "cast"
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            "R.drawable.jeff_bridges",
-                            "cast"
+                            null,
+                            "image"
                         )
                     ),
                     72f,

@@ -16,4 +16,12 @@ class MovieDetailViewModel(private val repository: MoviesRepository, private val
     fun getMovieCredits(): Flow<List<CastModel>> {
         return repository.getMovieCredits(movieId)
     }
+
+    fun getCastFromMovieCredits(credits: List<CastModel>): List<CastModel> {
+        return credits.filter { it.department == null }
+    }
+
+    fun getCrewFromMovieCredits(credits: List<CastModel>): List<CastModel> {
+        return credits.filter { it.department != null }
+    }
 }

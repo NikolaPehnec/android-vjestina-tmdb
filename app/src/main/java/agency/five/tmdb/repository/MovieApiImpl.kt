@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 
 class MovieApiImpl(private val client: HttpClient) : MovieApi {
@@ -82,10 +83,8 @@ data class MovieDetailResponse(
 data class MovieCreditsResponse(
     @SerialName("id")
     val idMovie: Int,
-    @SerialName("cast")
-    val cast: List<CastMember>,
-    @SerialName("crew")
-    val crew: List<CrewMember>
+    @JsonNames("cast", "crew")
+    val cast: List<MovieCreditsModel>,
 )
 
 @Serializable
@@ -97,24 +96,17 @@ data class Genres(
 )
 
 @Serializable
-data class CastMember(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("name")
-    val name: String,
-    @SerialName("character")
-    val roleName: String,
-    @SerialName("profile_path")
-    val picture: String?
-)
-
-@Serializable
-data class CrewMember(
+data class MovieCreditsModel(
     @SerialName("id")
     val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("department")
-    val department: String,
+    val department: String? = null,
+    @SerialName("character")
+    val roleName: String? = null,
+    @SerialName("profile_path")
+    val picture: String? = null
 )
+
 

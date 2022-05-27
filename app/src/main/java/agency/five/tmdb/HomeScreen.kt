@@ -1,8 +1,7 @@
 package agency.five.tmdb
 
-import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.Category
 import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.data.PreviewData
 import agency.five.tmdb.ui.theme.Blue
 import agency.five.tmdb.ui.theme.TmdbTheme
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -37,34 +37,18 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = getViewModel()
     val favoriteViewModel: FavoriteMoviesViewModel = getViewModel()
 
-    val categories = mutableListOf<MovieCategoryModel>()
-    categories.addAll(homeViewModel.getAllCategories().collectAsState(initial = listOf()).value)
-
-    val movies = remember { mutableStateListOf<MovieModel>() }
-    //Adding to collection if it's not already added (was stored in (mock)DB)
-    for (movie in homeViewModel.getAllMovies().collectAsState(initial = listOf()).value) {
-        if (movies.find { m -> m.id == movie.id } == null) {
-            movies.add(movie)
-        }
-    }
-
     HomeContent(
-        categories,
-        movies,
+        homeViewModel,
+        getMovieFlowByCategory = homeViewModel::getMoviesBasedOnCategory,
         onMovieCardClick = onMovieCardClick,
-        markMovieAsFavorite = { movie, isFavorite ->
-            {
-                favoriteViewModel.markMovieFavourite(movie, isFavorite)
-            }
-        },
+        markMovieAsFavorite = favoriteViewModel::markMovieFavourite,
         onSearchPressed = onSearchPressed
     )
 }
 
-@Composable
-fun HomeContent(
-    categories: List<MovieCategoryModel>,
-    movies: MutableList<MovieModel>,
+@Composable fun HomeContent(
+    homeViewModel: HomeViewModel,
+    getMovieFlowByCategory: (category: Category) -> Flow<List<MovieModel>>,
     onMovieCardClick: (String) -> Unit,
     markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit,
     onSearchPressed: (String) -> Unit
@@ -79,16 +63,16 @@ fun HomeContent(
 
         LazyColumn {
 
-            items(items = categories) { category ->
+            items(items = Category.values()) { category ->
 
                 MovieCategory(
-                    categoryModel = category,
-                    movies = (movies.filter { it.categories.contains(category.categoryName) }).toMutableList(),
+                    category = category,
+                    movies = getMovieFlowByCategory(category).collectAsState(initial = listOf()).value,
                     onMovieCardClick = onMovieCardClick,
                     markMovieAsFavorite = markMovieAsFavorite
                 )
-            }
 
+            }
         }
     }
 }
@@ -144,14 +128,12 @@ fun SearchField(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    TmdbTheme() {
-        HomeContent(
-            PreviewData.getCategories(),
-            mutableListOf(),
-            onMovieCardClick = { {} },
-            markMovieAsFavorite = { _, _ -> {} },
-            {}
-        )
+    TmdbTheme() {/*
+           HomeContent(
+               getMovieFlowByCategory = { _, _ -> Flow { listOf() } },
+               onMovieCardClick = { {} },
+               markMovieAsFavorite = { _, _ -> {} }
+           ) {}*/
     }
 }
 

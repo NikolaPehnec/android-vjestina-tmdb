@@ -53,7 +53,7 @@ fun Cast(
             )
 
             Text(
-                cast.roleName,
+                cast.roleName!!,
                 modifier = Modifier.padding(
                     horizontal =
                     dimensionResource(id = R.dimen.cast_info_horizontal_padding)

@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -53,16 +56,11 @@ fun MovieDetailScreen(movieId: Long) {
     )
 
     val movieModel = remember { mutableStateOf(PreviewData.getMovies()[0]) }
-     movieModel.value = movieDetailViewModel.getMovieByID()
+    movieModel.value = movieDetailViewModel.getMovieByID()
         .collectAsState(initial = PreviewData.getMovies()[0]).value!!
 
-    val castAndCrew = remember {
-        mutableListOf<CastModel>()
-    }
-
-    castAndCrew.addAll(
+    val castAndCrew =
         movieDetailViewModel.getMovieCredits().collectAsState(initial = listOf()).value
-    )
 
     val verticalScrollState: ScrollState = rememberScrollState();
 
@@ -76,9 +74,9 @@ fun MovieDetailScreen(movieId: Long) {
 
         MovieOverview(movieModel = movieModel.value)
 
-        MovieWriters(crew = castAndCrew.filter { it.castOrCrew.equals("crew") }.take(6))
+        MovieWriters(crew = movieDetailViewModel.getCrewFromMovieCredits(castAndCrew).take(6))
 
-        MovieCast(cast = castAndCrew.filter { it.castOrCrew.equals("cast") })
+        MovieCast(cast = movieDetailViewModel.getCastFromMovieCredits(castAndCrew))
 
     }
 }
@@ -235,7 +233,7 @@ fun MovieWriters(crew: List<CastModel>) {
                 }
                 Row() {
                     Text(
-                        crewMember.roleName,
+                        crewMember.department!!,
                         style = MaterialTheme.typography.h2,
                         color = Color.Black
                     )
