@@ -38,7 +38,6 @@ fun HomeScreen(
     val favoriteViewModel: FavoriteMoviesViewModel = getViewModel()
 
     HomeContent(
-        homeViewModel,
         getMovieFlowByCategory = homeViewModel::getMoviesBasedOnCategory,
         onMovieCardClick = onMovieCardClick,
         markMovieAsFavorite = favoriteViewModel::markMovieFavourite,
@@ -47,7 +46,6 @@ fun HomeScreen(
 }
 
 @Composable fun HomeContent(
-    homeViewModel: HomeViewModel,
     getMovieFlowByCategory: (category: Category) -> Flow<List<MovieModel>>,
     onMovieCardClick: (String) -> Unit,
     markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit,
@@ -57,17 +55,13 @@ fun HomeScreen(
         Modifier
             .padding(bottom = dimensionResource(id = R.dimen.bottom_padding_big))
     ) {
-
         SearchField(onSearchPressed)
 
-
         LazyColumn {
-
             items(items = Category.values()) { category ->
-
                 MovieCategory(
                     category = category,
-                    movies = getMovieFlowByCategory(category).collectAsState(initial = listOf()).value,
+                    moviesFlow = getMovieFlowByCategory(category),
                     onMovieCardClick = onMovieCardClick,
                     markMovieAsFavorite = markMovieAsFavorite
                 )

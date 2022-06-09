@@ -1,17 +1,12 @@
 package agency.five.tmdb.repository
 
-import agency.five.tmdb.data.Category
-import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.data.toCrewModel
-import agency.five.tmdb.data.toMovie
+import agency.five.tmdb.data.*
+import agency.five.tmdb.utils.NetworkChecker
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import okhttp3.internal.toImmutableList
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class MovieRepositoryImpl(
     private val movieApi: MovieApi,
     private val mockDB: MockDB,
@@ -19,82 +14,131 @@ class MovieRepositoryImpl(
 ) :
     MoviesRepository {
 
-    private val sharingScope = CoroutineScope(Dispatchers.Default)
-
-    private val popularMovies = flow { emit(mockDB.movies) }
-        .onStart {
+    private fun listenPopularMovies(): Flow<List<MovieModel>> = flow {
+        if (NetworkChecker.isOnline(appContext)) {
             movieApi.getPopularMovies().results.let {
                 emit(it.map { it.toMovie(false, Category.WHATS_POPULAR, appContext) })
             }
-        }.shareIn(
-            sharingScope,
-            SharingStarted.Lazily,
-            replay = 1
-        )
-
-    /*  private val popularMovies = flow {
-          movieApi.getNowPlayingMovies().results.let { it ->
-              emit(it.map { it.toMovie(false, Category.WHATS_POPULAR, appContext) })
-          }
-      }.flatMapConcat { movies ->
-          flow {
-              emit(mockDB.movies.filter { movieDb -> movies.any { it.id != movieDb.id } })
-          }
-      }*/
-
-
-    private val nowPlayingMovies = flow {
-        movieApi.getNowPlayingMovies().results.let {
-            emit(it.map { it.toMovie(false, Category.NOW_PLAYING, appContext) })
         }
     }
 
-    private val upcomingMovies = flow {
-        movieApi.getUpcomingMovies().results.let {
-            emit(it.map { it.toMovie(false, Category.UPCOMING, appContext) })
+    private fun listenNowPlayingMovies(): Flow<List<MovieModel>> = flow {
+        if (NetworkChecker.isOnline(appContext)) {
+            movieApi.getNowPlayingMovies().results.let {
+                emit(it.map { it.toMovie(false, Category.NOW_PLAYING, appContext) })
+            }
         }
     }
 
-    override fun getPopularMovies(): Flow<List<MovieModel>> = popularMovies
-
-
-    override fun getNowPlayingMovies(): Flow<List<MovieModel>> = nowPlayingMovies
-
-    override fun getUpcomingMovies(): Flow<List<MovieModel>> = upcomingMovies
-
-
-    override fun getMovieByID(id: Long): Flow<MovieModel> =
-        flow {
-            if (mockDB.movies.firstOrNull { it.id == id } != null)
-                emit(mockDB.movies.first { it.id == id })
+    private fun listenUpcomingMovies(): Flow<List<MovieModel>> = flow {
+        if (NetworkChecker.isOnline(appContext)) {
+            movieApi.getNowPlayingMovies().results.let {
+                emit(it.map { it.toMovie(false, Category.UPCOMING, appContext) })
+            }
         }
+    }
+
+
+    override fun getPopularMovies(): Flow<List<MovieModel>> {
+        val movies = mockDB.movies
+
+        return listenPopularMovies()
             .onStart {
-                emit(movieApi.getMovieByID(id).toMovie(true, ""))
-            }.shareIn(
-                sharingScope,
-                SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000L),
-                replay = 1
-            )
+                emit(movies)
+            }
+            .onEach { moviesDbOrApi ->
+                for (m in moviesDbOrApi) {
+                    if (!mockDB.movies.any { it.id == m.id })
+                        mockDB.movies.add(m)
+                }
+            }.flowOn(Dispatchers.Default)
+    }
 
-    override fun getMovieCredits(id: Long) = flow {
-        if (mockDB.movies.firstOrNull { it.id == id } != null) {
-            emit(mockDB.movies.first { it.id == id }.castAndCew.toImmutableList())
+    override fun getNowPlayingMovies(): Flow<List<MovieModel>> {
+        val movies = mockDB.movies
+
+        return listenNowPlayingMovies()
+            .onStart {
+                emit(movies)
+            }
+            .onEach { moviesDbOrApi ->
+                for (m in moviesDbOrApi) {
+                    if (!mockDB.movies.any { it.id == m.id })
+                        mockDB.movies.add(m)
+                }
+            }.flowOn(Dispatchers.Default)
+    }
+
+    override fun getUpcomingMovies(): Flow<List<MovieModel>> {
+        val movies = mockDB.movies
+
+        return listenUpcomingMovies()
+            .onStart {
+                emit(movies)
+            }
+            .onEach { moviesDbOrApi ->
+                for (m in moviesDbOrApi) {
+                    if (!mockDB.movies.any { it.id == m.id })
+                        mockDB.movies.add(m)
+                }
+            }.flowOn(Dispatchers.Default)
+    }
+
+    private fun listenMovieByID(id: Long): Flow<MovieModel> = flow {
+        if (NetworkChecker.isOnline(appContext)) {
+            movieApi.getMovieByID(id)?.let {
+                emit(it.toMovie(true, ""))
+            }
         }
-    }.onStart {
-        val movieCreditResponse = movieApi.getMovieCredits(id)
+    }
 
-        movieCreditResponse.cast.let { emit(it.map { it.toCrewModel() }) }
-    }.shareIn(
-        sharingScope,
-        SharingStarted.Lazily,
-        replay = 1
-    )
+
+    override fun getMovieByID(id: Long): Flow<MovieModel> {
+        val movieDb = mockDB.movies.firstOrNull() { it.id == id }
+
+        return listenMovieByID(id)
+            .onStart {
+                if (movieDb != null && !NetworkChecker.isOnline(appContext)) emit(movieDb)
+            }.onEach {
+                if (movieDb == null) {
+                    val index = mockDB.movies.indexOfFirst { it.id == id }
+                    if (index != -1)
+                        mockDB.movies[index] = it
+                }
+            }.flowOn(Dispatchers.Default)
+    }
+
+    override fun getMovieCredits(id: Long): Flow<List<CastModel>> {
+        val movieDb = mockDB.movies.firstOrNull { it.id == id }
+
+        return flow {
+            if (NetworkChecker.isOnline(appContext)) {
+                val movieCreditsResponse = movieApi.getMovieCredits(id)
+                val credits = mutableListOf<MovieCreditsModel>()
+                credits.addAll(movieCreditsResponse.crew)
+                credits.addAll(movieCreditsResponse.cast)
+
+                emit(credits.map { it.toCrewModel() })
+            }
+        }.onStart {
+            if (movieDb != null && movieDb.castAndCew.isNotEmpty()) {
+                emit(movieDb.castAndCew)
+            }
+        }.onEach { movieCredits ->
+            mockDB.movies.firstOrNull { it.id == id }.let {
+                if (it != null) {
+                    it.castAndCew = movieCredits
+                }
+            }
+        }.flowOn(Dispatchers.Default)
+    }
 
     override fun queryMovies(query: String): Flow<List<MovieModel>> = flow {
         movieApi.queryMovies(query).results.let {
-            emit(it.map { it.toMovie(false, Category.UPCOMING, appContext = appContext) })
+            if (it.isNotEmpty())
+                emit(it.map { it.toMovie(false, Category.UPCOMING, appContext = appContext) })
         }
-    }
+    }.flowOn(Dispatchers.Default)
 
     private val favouriteMoviesPublisher = MutableSharedFlow<List<MovieModel>>()
 

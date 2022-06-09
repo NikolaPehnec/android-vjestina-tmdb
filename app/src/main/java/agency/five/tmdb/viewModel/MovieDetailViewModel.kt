@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class MovieDetailViewModel(private val repository: MoviesRepository, private val movieId: Long) :
     ViewModel() {
 
-    fun getMovieByID(): Flow<MovieModel?> {
+    fun getMovieByID(): Flow<MovieModel> {
         return repository.getMovieByID(movieId)
     }
 

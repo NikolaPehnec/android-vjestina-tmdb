@@ -1,42 +1,64 @@
 package agency.five.tmdb.repository
 
+import agency.five.tmdb.data.FetchingDataException
 import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 
 
 class MovieApiImpl(private val client: HttpClient) : MovieApi {
 
-    override suspend fun getPopularMovies(): MovieListResponse =
-        client.get("$BASE_URL/movie/popular?api_key=$API_KEY")
+    override suspend fun getPopularMovies(): MovieListResponse {
+        return try {
+            return client.get("$BASE_URL/movie/popular?api_key=$API_KEY")
+        } catch (cause: FetchingDataException) {
+            MovieListResponse(emptyList(), "Error while fetching data")
+        }
+    }
 
-    override suspend fun getNowPlayingMovies(): MovieListResponse =
-        client.get("$BASE_URL/movie/now_playing?api_key=$API_KEY")
+    override suspend fun getNowPlayingMovies(): MovieListResponse {
+        return try {
+            return client.get("$BASE_URL/movie/now_playing?api_key=$API_KEY")
+        } catch (cause: FetchingDataException) {
+            MovieListResponse(emptyList(), "Error while fetching data")
+        }
+    }
 
-    override suspend fun getUpcomingMovies(): MovieListResponse =
-        client.get("$BASE_URL/movie/upcoming?api_key=$API_KEY")
+    override suspend fun getUpcomingMovies(): MovieListResponse {
+        return try {
+            client.get("$BASE_URL/movie/upcoming?api_key=$API_KEY")
+        } catch (cause: FetchingDataException) {
+            MovieListResponse(emptyList(), "Error while fetching data")
+        }
+    }
 
-    override suspend fun getTopRatedMovies(): MovieListResponse =
-        client.get("$BASE_URL/movie/top_rated?api_key=$API_KEY")
+    override suspend fun getMovieByID(id: Long): MovieDetailResponse? {
+        return try {
+            client.get("$BASE_URL/movie/$id?api_key=$API_KEY")
+        } catch (cause: FetchingDataException) {
+            null
+        }
+    }
 
-    override suspend fun getMovieByID(id: Long): MovieDetailResponse =
-        client.get("$BASE_URL/movie/$id?api_key=$API_KEY")
-
-    override suspend fun getMovieCredits(id: Long): MovieCreditsResponse =
-        client.get("$BASE_URL/movie/$id/credits?api_key=$API_KEY")
+    override suspend fun getMovieCredits(id: Long): MovieCreditsResponse {
+        return try {
+            client.get("$BASE_URL/movie/$id/credits?api_key=$API_KEY")
+        } catch (cause: FetchingDataException) {
+            MovieCreditsResponse(0, emptyList(), emptyList(), "Error while fetching data")
+        }
+    }
 
     override suspend fun queryMovies(query: String): MovieListResponse =
         client.get("$BASE_URL/search/movie?api_key=$API_KEY&query=$query")
-
 
 }
 
 @Serializable
 data class MovieListResponse(
     @SerialName("results")
-    val results: List<MovieResponse>
+    val results: List<MovieResponse>,
+    val error: String? = null
 )
 
 @Serializable
@@ -49,8 +71,8 @@ data class MovieResponse(
     val overview: String,
     @SerialName("poster_path")
     val posterPath: String?,
-    @SerialName("popularity")
-    val popularity: Float,
+    @SerialName("vote_average")
+    val vote_average: Float,
     @SerialName("release_date")
     val releaseDate: String?,
     @SerialName("genre_ids")
@@ -83,8 +105,11 @@ data class MovieDetailResponse(
 data class MovieCreditsResponse(
     @SerialName("id")
     val idMovie: Int,
-    @JsonNames("cast", "crew")
+    @SerialName("cast")
     val cast: List<MovieCreditsModel>,
+    @SerialName("crew")
+    val crew: List<MovieCreditsModel>,
+    val error: String? = null
 )
 
 @Serializable

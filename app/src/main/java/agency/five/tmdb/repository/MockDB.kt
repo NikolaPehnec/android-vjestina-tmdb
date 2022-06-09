@@ -7,7 +7,7 @@ import java.util.*
 
 class MockDB() {
 
-    val movies = listOf<MovieModel>(
+    val movies = mutableListOf<MovieModel>(
         MovieModel(
             675353,
             "Sonic the Hedgehog 2",

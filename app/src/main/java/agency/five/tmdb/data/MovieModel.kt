@@ -3,8 +3,6 @@ package agency.five.tmdb.data
 import agency.five.tmdb.repository.MovieDetailResponse
 import agency.five.tmdb.repository.MovieResponse
 import android.content.Context
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 data class MovieModel(
@@ -33,13 +31,16 @@ fun MovieResponse.toMovie(isFavorite: Boolean, category: Category, appContext: C
         listOf(appContext.resources.getString(category.resourceId)),
         listOf(category.tags.random()),
         listOf(),
-        popularity,
+        vote_average * 10,
         try {
-            SimpleDateFormat("yyyy-mm-dd").parse(releaseDate)
-        } catch (e: ParseException) {
+            Date(
+                releaseDate!!.split("-")[0].toInt(),
+                releaseDate.split("-")[1].toInt(),
+                releaseDate.split("-")[2].toInt(),
+            )
+        } catch (e: NumberFormatException) {
             Date(1, 1, 1)
         },
-        // SimpleDateFormat("yyyy-mm-dd").parse(releaseDate),
         genres.map { it.toString() },
         runtime.toString(),
         overview,
