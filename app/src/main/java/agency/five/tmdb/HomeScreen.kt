@@ -1,8 +1,7 @@
 package agency.five.tmdb
 
-import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.Category
 import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.data.PreviewData
 import agency.five.tmdb.ui.theme.Blue
 import agency.five.tmdb.ui.theme.TmdbTheme
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
@@ -17,84 +16,76 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen(
+    onSearchPressed: (String) -> Unit,
     onMovieCardClick: (String) -> Unit,
 ) {
     val homeViewModel: HomeViewModel = getViewModel()
     val favoriteViewModel: FavoriteMoviesViewModel = getViewModel()
 
-    val allMovies: List<MovieModel> =
-        homeViewModel.getAllMovies().collectAsState(initial = listOf()).value
-    val allCategories: List<MovieCategoryModel> =
-        homeViewModel.getAllCategories().collectAsState(initial = listOf()).value
-
     HomeContent(
-        allMovies,
-        allCategories,
+        getMovieFlowByCategory = homeViewModel::getMoviesBasedOnCategory,
         onMovieCardClick = onMovieCardClick,
-        markMovieAsFavorite = { movie, isFavorite ->
-            {
-                favoriteViewModel.markMovieFavourite(movie, isFavorite)
-            }
-        })
+        markMovieAsFavorite = favoriteViewModel::markMovieFavourite,
+        onSearchPressed = onSearchPressed
+    )
 }
 
-@Composable
-fun HomeContent(
-    allMovies: List<MovieModel>,
-    allCategories: List<MovieCategoryModel>,
+@Composable fun HomeContent(
+    getMovieFlowByCategory: (category: Category) -> Flow<List<MovieModel>>,
     onMovieCardClick: (String) -> Unit,
-    markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
+    markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit,
+    onSearchPressed: (String) -> Unit
 ) {
     Column(
         Modifier
             .padding(bottom = dimensionResource(id = R.dimen.bottom_padding_big))
     ) {
-
-        SearchField()
+        SearchField(onSearchPressed)
 
         LazyColumn {
-
-            var movies: List<MovieModel>
-
-            items(items = allCategories) { categoryModel ->
-
-                movies = allMovies.filter { movie ->
-                    movie.categories.contains(categoryModel.categoryName)
-                }
-
+            items(items = Category.values()) { category ->
                 MovieCategory(
-                    categoryModel = categoryModel,
-                    movies = movies,
+                    category = category,
+                    moviesFlow = getMovieFlowByCategory(category),
                     onMovieCardClick = onMovieCardClick,
                     markMovieAsFavorite = markMovieAsFavorite
                 )
-            }
 
+            }
         }
     }
 }
 
 @Composable
-fun SearchField() {
+fun SearchField(
+    onSearchPressed: (String) -> Unit,
+) {
+    val textState = remember { mutableStateOf(TextFieldValue()) }
+
     TextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(id = R.dimen.horizontal_padding))
             .padding(top = 16.dp, bottom = 4.dp),
-        value = "", onValueChange = {},
+        value = textState.value,
+        onValueChange = {
+            textState.value = it
+        },
         label = {
             Text(
                 stringResource(id = R.string.search), style = MaterialTheme.typography.button,
@@ -102,9 +93,20 @@ fun SearchField() {
             )
         },
         leadingIcon = {
+            IconButton(
+                onClick = {
+                    onSearchPressed(textState.value.text)
+                },
+            ) {
+                Icon(
+                    Icons.Filled.Search, "",
+                    tint = Blue
+                )
+            }
+        },
+        trailingIcon = {
             Icon(
-                Icons.Filled.Search, stringResource(id = R.string.search_box_desc),
-                tint = Blue
+                Icons.Filled.Close, "",
             )
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.search_text_rounded_corner)),
@@ -120,13 +122,12 @@ fun SearchField() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    TmdbTheme() {
-        HomeContent(
-            PreviewData.getMovies(),
-            PreviewData.getCategories(),
-            onMovieCardClick = { {} },
-            markMovieAsFavorite = { _, _ -> {} }
-        )
+    TmdbTheme() {/*
+           HomeContent(
+               getMovieFlowByCategory = { _, _ -> Flow { listOf() } },
+               onMovieCardClick = { {} },
+               markMovieAsFavorite = { _, _ -> {} }
+           ) {}*/
     }
 }
 

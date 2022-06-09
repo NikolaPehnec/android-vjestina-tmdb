@@ -3,6 +3,7 @@ package agency.five.tmdb.DI
 import agency.five.tmdb.viewModel.FavoriteMoviesViewModel
 import agency.five.tmdb.viewModel.HomeViewModel
 import agency.five.tmdb.viewModel.MovieDetailViewModel
+import agency.five.tmdb.viewModel.MovieSearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,5 +16,8 @@ val viewModelModules = module {
     }
     viewModel {
         MovieDetailViewModel(get(), get())
+    }
+    viewModel {
+        MovieSearchViewModel(get(), get())
     }
 }

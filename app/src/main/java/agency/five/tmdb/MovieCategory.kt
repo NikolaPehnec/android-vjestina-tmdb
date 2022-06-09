@@ -1,9 +1,8 @@
 package agency.five.tmdb
 
-import agency.five.tmdb.data.MovieCategoryModel
+import agency.five.tmdb.data.Category
 import agency.five.tmdb.data.MovieModel
-import agency.five.tmdb.data.PreviewData
-import agency.five.tmdb.ui.theme.TmdbTheme
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -14,23 +13,42 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun MovieCategory(
     modifier: Modifier = Modifier,
-    categoryModel: MovieCategoryModel,
-    movies: List<MovieModel>,
+    category: Category,
+    moviesFlow: Flow<List<MovieModel>>,
     onMovieCardClick: (String) -> Unit,
     markMovieAsFavorite: (movie: MovieModel, isFavorite: Boolean) -> Unit
 ) {
+    val movies = moviesFlow.collectAsState(initial = listOf()).value
+    val allMovies = remember { mutableStateListOf<MovieModel>() }
+
+    //New movie from flow
+    for (newMovie in movies) {
+        if (!allMovies.any { it.id == newMovie.id })
+            allMovies.add(newMovie)
+    }
+
+    //Index of selected tag
+    var scrollableTabRowState by remember {
+        mutableStateOf(0)
+    }
 
     //Movies filtered by selected tag - Popular/Top rated
-    var moviesToPresent by remember {
-        mutableStateOf(movies)
+    var moviesToPresent by remember { mutableStateOf(emptyList<MovieModel>()) }
+    moviesToPresent = allMovies.filter { movie ->
+        movie.tags.contains(
+            category.tags[scrollableTabRowState]
+        )
     }
+
 
     Column(
         modifier
@@ -40,14 +58,10 @@ fun MovieCategory(
 
         Row(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.horizontal_padding))) {
             Text(
-                text = categoryModel.categoryName,
+                text = LocalContext.current.resources.getString(category.resourceId),
                 style = MaterialTheme.typography.h1,
                 color = MaterialTheme.colors.primary
             )
-        }
-
-        var scrollableTabRowState by remember {
-            mutableStateOf(0)
         }
 
         ScrollableTabRow(
@@ -65,7 +79,7 @@ fun MovieCategory(
             backgroundColor = Color.White,
             edgePadding = dimensionResource(id = R.dimen.horizontal_padding)
         ) {
-            categoryModel.tags.forEachIndexed { index, title ->
+            category.tags.forEachIndexed { index, title ->
                 Tab(
                     text = {
                         Text(
@@ -81,11 +95,6 @@ fun MovieCategory(
                     selected = scrollableTabRowState == index,
                     onClick = {
                         scrollableTabRowState = index
-
-                        val tagSelected = categoryModel.tags[scrollableTabRowState]
-                        val moviesByTags =
-                            movies.filter { movie -> movie.tags.contains(tagSelected) }
-                        moviesToPresent = moviesByTags
                     }
                 )
             }
@@ -110,14 +119,16 @@ fun MovieCategory(
 }
 
 
+@SuppressLint("UnrememberedMutableState")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun categoriesPreview() {
-    TmdbTheme() {
-        MovieCategory(categoryModel = PreviewData.getCategories()[0],
-            movies = PreviewData.getMovies(),
-            onMovieCardClick = {},
-            markMovieAsFavorite = { _, _ -> })
-    }
+    /*   TmdbTheme() {
+           MovieCategory(
+               category = Category.UPCOMING,
+               moviesFlow = mutableListOf(),
+               onMovieCardClick = {},
+               markMovieAsFavorite = { _, _ -> })
+       }*/
 }

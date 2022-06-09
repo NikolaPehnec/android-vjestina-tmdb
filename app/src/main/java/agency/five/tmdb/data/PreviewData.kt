@@ -1,6 +1,5 @@
 package agency.five.tmdb.data
 
-import agency.five.tmdb.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.util.*
@@ -30,351 +29,374 @@ class PreviewData {
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
+        fun getMoviesForCategories(): MutableMap<MovieCategoryModel, List<MovieModel>> {
+            var moviesForCategories: MutableMap<MovieCategoryModel, List<MovieModel>> =
+                mutableMapOf()
+
+            for (category in getCategories()) {
+                moviesForCategories.put(
+                    category,
+                    getMovies().filter { m -> m.categories.contains(category.categoryName) }
+                )
+            }
+            return moviesForCategories
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
         fun getMovies(): List<MovieModel> {
-            return listOf(
+            return listOf<MovieModel>(
                 MovieModel(
-                    1,
-                    "Iron man",
-                    R.drawable.iron_man,
-                    listOf("What's popular", "Now playing"),
-                    listOf("Popular", "Top rated"),
+                    675353,
+                    "Sonic the Hedgehog 2",
+                    "https://image.tmdb.org/t/p/w300/egoyMDLqCxzjnSrWOz50uLlJWmD.jpg",
+                    listOf("What's popular"),
+                    listOf("Popular"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     75f,
                     Date(2008, 2, 5),
-                    // LocalDate.of(2008, 2, 5),
                     listOf("Action", "Science Fiction", "Adventure"),
                     "2h 6m",
-                    "After being held captive in an Afghan cave, billionare engineer Tony Stark creates" +
-                            "a unique weaponized suit of armor to fight evil.",
-                    true
+                    "After settling in Green Hills, Sonic is eager to prove he has what it takes to be a true hero. " +
+                            "His test comes when Dr. Robotnik returns, this time with a new partner, Knuckles, in search for an emerald that has the power to " +
+                            "destroy civilizations.",
+                    false
                 ),
                 MovieModel(
-                    2,
-                    "Gattaca",
-                    R.drawable.gattaca,
+                    335787,
+                    "Uncharted",
+                    "https://image.tmdb.org/t/p/w300/tlZpSxYuBRoVJBOpUrPdQe9FmFq.jpg",
                     listOf("What's popular"),
                     listOf("Popular"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     78f,
                     Date(1997, 10, 24),
                     listOf("Science Fiction", "Romance"),
                     "1h 46m",
-                    "A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.",
-                    true
+                    "A young street-smart, Nathan Drake and his wisecracking partner Victor “Sully” Sullivan embark on a dangerous pursuit of “the greatest treasure never found” while also tracking clues that may lead to Nathan’s long-lost brother.",
+                    false
                 ),
                 MovieModel(
-                    3,
-                    "Lion king",
-                    R.drawable.lion,
+                    414906,
+                    "The Batman",
+                    "https://image.tmdb.org/t/p/w300/74xTEgt7R36Fpooo50r9T25onhq.jpg",
                     listOf("What's popular"),
                     listOf("Popular"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     85f,
                     Date(1994, 6, 24),
                     listOf("Musical", "Family"),
                     "1h 29m",
-                    "As a cub, Simba is forced to leave the Pride Lands after his father Mufasa is murdered by his wicked uncle, Scar. ",
-                    true
+                    "In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.",
+                    false
                 ),
                 MovieModel(
-                    4,
-                    "Jungle beat",
-                    R.drawable.jungle,
+                    629542,
+                    "The Bad Guys",
+                    "https://image.tmdb.org/t/p/w300/7qop80YfuO0BwJa1uXk1DXUUEwv.jpg",
                     listOf("Now playing", "Upcoming"),
                     listOf("Streaming", "On TV", "Today"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     55f,
                     Date(2020, 6, 15),
                     listOf("Adventure", "Family"),
                     "1h 24m",
-                    "One morning, the animals of the jungle wake up to discover that they can speak. They're even more amazed when they learn the reason why: There's an alien in the jungle.",
-                    true
+                    "When the infamous Bad Guys are finally caught after years of countless heists and being the world’s most-wanted villains, Mr. Wolf brokers a deal to save them all from prison.",
+                    false
                 ),
                 MovieModel(
-                    5,
-                    "Puppy love",
-                    R.drawable.puppylove,
+                    883502,
+                    "Fortress: Sniper's Eye",
+                    "https://image.tmdb.org/t/p/w300/61J34xHVVdQHbJ4MSCWQo4e727v.jpg",
                     listOf("Now playing"),
-                    listOf("Streaming", "On TV"),
+                    listOf("Streaming"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     56f,
                     Date(2013, 9, 21),
                     listOf("Romance", "Drama"),
                     "1h 25m",
-                    "A lonely teen's (Solène Rigot) friendship with a free-spirited British neighbor (Audrey Bastien) pushes her to break free of the bonds of childhood.",
-                    true
+                    "Weeks after the deadly assault on Fortress Camp, Robert makes a daring rescue to save Sasha, the widow of his old nemesis Balzary. But back in the camp's command bunker, it appears Sasha may have devious plans of her own. As a new attack breaks out, Robert is confronted with a familiar face he thought he'd never see again…",
+                    false
                 ),
                 MovieModel(
-                    6,
-                    "Avengers: civil war",
-                    R.drawable.civilwar,
+                    799876,
+                    "The Outfit",
+                    "https://image.tmdb.org/t/p/w300/lZa5EB6PVJBT5mxhgZS5ftqdAm6.jpg",
                     listOf("Now playing"),
-                    listOf("Streaming", "On TV", "For Rent"),
+                    listOf("On TV"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     78f,
                     Date(2016, 5, 5),
                     listOf("Action", "Adventure"),
                     "2h 28m",
-                    "Friction arises between the Avengers when one group supports the government's decision to implement a law to control their powers while the other opposes it.",
-                    true
+                    "Leonard is an English tailor who used to craft suits on London’s world-famous Savile Row. After a personal tragedy, he’s ended up in Chicago, operating a small tailor shop in a rough part of town where he makes beautiful clothes for the only people around who can afford them: a family of vicious gangsters.",
+                    false
                 ),
                 MovieModel(
-                    7,
-                    "Iron man 2",
-                    R.drawable.ironman2,
+                    294793,
+                    "All the Old Knives",
+                    "https://image.tmdb.org/t/p/w300/g4tMniKxol1TBJrHlAtiDjjlx4Q.jpg",
                     listOf("Now playing"),
                     listOf("In theatre"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     88f,
                     Date(2010, 4, 29),
                     listOf("Action", "Adventure"),
                     "2h 28m",
-                    "Tony Stark is under pressure from various sources, including the government, to share his technology with the world. He must find a way to fight them while also tackling his other enemies.",
-                    true
+                    "When the CIA discovers one of its agents leaked information that cost more than 100 people their lives, veteran operative Henry Pelham is assigned to root out the mole with his former lover and colleague Celia Harrison.",
+                    false
                 ),
                 MovieModel(
-                    8,
-                    "Godzilla",
-                    R.drawable.godzila,
+                    532710,
+                    "Firestarter",
+                    "https://image.tmdb.org/t/p/w300/2MTGip0nfahQ1jPQCZSfCsPBZes.jpg",
                     listOf("Upcoming"),
-                    listOf("Today", "This week"),
+                    listOf("Today"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     63f,
                     Date(2004, 11, 29),
                     listOf("Science Fiction", "Action"),
                     "2h 5m",
-                    "The Earth Defence Force leaves it to Godzilla to save the Earth from sinister aliens and the monsters they control. Will Godzilla save the world?",
-                    true
+                    "For more than a decade, parents Andy and Vicky have been on the run, desperate to hide their daughter Charlie from a shadowy federal agency that wants to harness her unprecedented gift for creating fire into a weapon of mass destruction. ",
+                    false
                 ),
                 MovieModel(
-                    9,
-                    "Iron man 3",
-                    R.drawable.ironman3,
+                    361743,
+                    "Top Gun: Maverick",
+                    "https://image.tmdb.org/t/p/w300/wxP2Mzv9CdjOK6t4dNnFGqIQl0V.jpg",
                     listOf("Upcoming"),
-                    listOf("Today", "This week"),
+                    listOf("This week"),
                     listOf(
-                        Writer("Don Heck", "Characters"),
-                        Writer("Jack Kirby", "Characters"),
-                        Writer("Jon Favreau", "Director"),
-                        Writer("Don Heck", "Screenplay"),
-                        Writer("Jack Macrum", "Screenplay"),
-                        Writer("Matt Holloway", "Screenplay"),
-                    ),
-                    listOf(
+                        CastModel("Don Heck", null, "Characters", null),
+                        CastModel("Jack Kirby", null, "Characters", null),
+                        CastModel("Jon Favreau", null, "Director", null),
+                        CastModel("Don Heck", null, "Screenplay", null),
+                        CastModel("Jack Macrum", null, "Screenplay", null),
+                        CastModel("Matt Holloway", null, "Screenplay", null),
                         CastModel(
                             "Robert Downey Jr.",
                             "Tony Stark/Iron man",
-                            R.drawable.robert_downey
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Terrence Howard",
                             "James Rhodes",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         ),
                         CastModel(
                             "Jeff Bridges",
                             "Obadiah Stane/Iron Monger",
-                            R.drawable.terrence_howard
+                            null,
+                            "image"
                         )
                     ),
                     72f,
                     Date(2013, 4, 25),
                     listOf("Science Fiction", "Action"),
                     "2h 10m",
-                    "Tony Stark encounters a formidable foe called the Mandarin. After failing to defeat his enemy, Tony embarks on a journey of self-discovery as he fights against the powerful Mandarin.",
-                    true
+                    "After more than thirty years of service as one of the Navy's top aviators, Pete Mitchell is where he belongs, pushing the envelope as a courageous test pilot and dodging the advancement in rank that would ground him.",
+                    false
                 )
             )
         }

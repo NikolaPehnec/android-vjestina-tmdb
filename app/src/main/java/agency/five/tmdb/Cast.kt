@@ -53,7 +53,7 @@ fun Cast(
             )
 
             Text(
-                cast.roleName,
+                cast.roleName!!,
                 modifier = Modifier.padding(
                     horizontal =
                     dimensionResource(id = R.dimen.cast_info_horizontal_padding)
@@ -74,7 +74,8 @@ fun CastPreview() {
             cast = CastModel(
                 "Robert Downey Jr.",
                 "Tony Stark/Iron man",
-                R.drawable.robert_downey
+                "R.drawable.robert_downey",
+                "cast"
             )
         )
     }

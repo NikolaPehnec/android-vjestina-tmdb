@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -14,6 +16,7 @@ import androidx.compose.material.IconToggleButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,10 +34,20 @@ fun Movie(
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.movie_picture_rounded_corner)),
     ) {
-        //Without the builder with placeholder, no images were loaded
-        Image(painter = rememberImagePainter(data = movie.imageUrl, builder = {
-            placeholder(R.drawable.iron_man)
-        }), contentDescription = null)
+        Image(
+            painter = rememberImagePainter(data = movie.imageUrl, builder = {
+                R.drawable.iron_man
+            }),
+            modifier = Modifier
+                .sizeIn(
+                    maxWidth = dimensionResource(id = R.dimen.movie_picture_max_width),
+                    maxHeight = dimensionResource(id = R.dimen.movie_picture_max_height)
+                )
+                .fillMaxHeight(),
+            contentScale = ContentScale.Crop,
+            contentDescription = null
+        )
+
         Column() {
             FavoriteButton(movie, markMovieAsFavorite)
         }
