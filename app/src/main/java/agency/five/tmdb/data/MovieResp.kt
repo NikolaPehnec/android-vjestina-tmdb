@@ -1,11 +1,12 @@
 package agency.five.tmdb.data
 
+import agency.five.tmdb.DB.MovieModel
 import agency.five.tmdb.repository.MovieDetailResponse
 import agency.five.tmdb.repository.MovieResponse
 import android.content.Context
 import java.util.*
 
-data class MovieModel(
+/*data class MovieModel(
     val id: Long,
     val name: String,
     val imageUrl: String,
@@ -18,7 +19,7 @@ data class MovieModel(
     val duration: String,
     val overview: String,
     var isFavorite: Boolean
-)
+)*/
 
 
 const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
@@ -37,9 +38,9 @@ fun MovieResponse.toMovie(isFavorite: Boolean, category: Category, appContext: C
                 releaseDate!!.split("-")[0].toInt(),
                 releaseDate.split("-")[1].toInt(),
                 releaseDate.split("-")[2].toInt(),
-            )
+            ).toString()
         } catch (e: NumberFormatException) {
-            Date(1, 1, 1)
+            Date(1, 1, 1).toString()
         },
         genres.map { it.toString() },
         runtime.toString(),
@@ -59,7 +60,7 @@ fun MovieDetailResponse.toMovie(isFavorite: Boolean, categoryName: String) = Mov
         releaseDate.split("-")[0].toInt(),
         releaseDate.split("-")[1].toInt(),
         releaseDate.split("-")[2].toInt(),
-    ),
+    ).toString(),
     genres.map { it.name },
     runtime.toString(),
     overview,
